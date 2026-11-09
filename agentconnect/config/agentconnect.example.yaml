@@ -35,6 +35,7 @@ payments:
   default_token_symbol: "USDC"      # e.g., USDC or CELO; drives ERC-20 vs native tools
   chain_id: "11142220"              # Celo Sepolia (testnet)
   rpc_url: "https://forno.celo-sepolia.celo-testnet.org"
+  x402_max_amount_per_payment: "$0.50"  # per-payment cap when an agent pays an x402 (HTTP 402) endpoint
   attribution_data_suffix: ""       # optional ERC-8021 suffix (0x...) appended to every tx
   wallet_data_dir: "data/agent_wallets"  # where agent wallets are stored (non-secret path)
 

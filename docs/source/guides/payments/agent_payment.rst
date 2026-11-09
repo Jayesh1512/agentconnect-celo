@@ -70,6 +70,23 @@ publish it.
    ``Payment capabilities disabled due to invalid CDP environment`` if payment tools
    seem to be missing.
 
+Paying x402 Endpoints (Celo Facilitator)
+--------------------------------------------
+
+Agents with ``enable_payments=True`` also get a ``pay_for_x402_resource`` tool. It calls a
+URL and, if the server answers ``402 Payment Required``, signs a stablecoin authorization
+with the agent wallet and retries. The seller's x402 server settles it through a
+facilitator such as ``https://x402.celo.org``, which pays the gas, so the agent needs no
+CELO for these payments.
+
+.. code-block:: bash
+
+    pip install "x402[requests,evm]"
+
+Each payment is capped by ``payments.x402_max_amount_per_payment`` (default ``$0.50``);
+larger prices are refused before anything is signed. The buyer side needs no facilitator
+API key (the seller's server holds that). Test on Celo Sepolia first.
+
 Configuring Wallets
 -----------------------
 

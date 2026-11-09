@@ -77,6 +77,7 @@ agentconnect config init|show|validate <file>
 - **PaymentsSettings**
   - `default_token_symbol` (normalized to uppercase; drives ERC-20 vs native)
   - `wallet_data_dir` (path for wallet key files; keep out of version control)
+  - `x402_max_amount_per_payment` (per-payment cap for x402 purchases, default `$0.50`)
   - `attribution_data_suffix` (optional ERC-8021 suffix appended to every transaction's calldata)
   - `chain_id` / `rpc_url` (default Celo Sepolia `11142220`; Celo mainnet is `42220` / `https://forno.celo.org`)
 

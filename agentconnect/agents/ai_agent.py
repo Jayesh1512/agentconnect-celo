@@ -332,6 +332,17 @@ class AIAgent(BaseAgent):
 
                 agentkit_tools = get_langchain_tools(self.agent_kit)
                 custom_tools_list.extend(agentkit_tools)
+                try:
+                    from agentconnect.utils.x402_client import build_x402_tool
+
+                    custom_tools_list.append(
+                        build_x402_tool(self.wallet_provider.account)
+                    )
+                except ImportError:
+                    logger.info(
+                        "x402 tool disabled (pip install 'x402[requests,evm]') agent_id=%s",
+                        self.agent_id,
+                    )
                 configured_symbol = global_settings.payments.default_token_symbol
                 # Do not emit extra ok lines; keep workflow.init minimal
 

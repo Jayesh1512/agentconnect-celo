@@ -276,6 +276,10 @@ class PaymentsSettings(BaseModel):
         default="11142220",
         description="EVM chain id for payments. Celo Sepolia=11142220, Celo mainnet=42220.",
     )
+    x402_max_amount_per_payment: str = Field(
+        default="$0.50",
+        description="Per-payment spend cap for x402 purchases (USD string like '$0.50').",
+    )
     attribution_data_suffix: str = Field(
         default="",
         description="Optional ERC-8021 attribution suffix (0x-hex) appended to every transaction's calldata, e.g. the `celo.dataSuffix` from `loops project get`.",
