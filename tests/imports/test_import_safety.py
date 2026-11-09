@@ -105,7 +105,8 @@ def test_base_agent_payments_enabled_handles_missing_coinbase(monkeypatch):
         "coinbase_agentkit_langchain",
         "cdp",
     ]:
-        sys.modules.pop(name, None)
+        # None in sys.modules makes `import name` raise ImportError even if installed
+        monkeypatch.setitem(sys.modules, name, None)
 
     from agentconnect.core.agent import BaseAgent
     from agentconnect.core.types import (

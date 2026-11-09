@@ -106,6 +106,20 @@ agent = AIAgent(
 
 app = FastAPI()
 
+if os.getenv("X402_SELLER") == "1":  # sell a USAT-priced route through the Celo facilitator
+    from agentconnect.utils.x402_seller import build_routes, create_x402_paywall, pay_to_address
+
+    _pay_to = pay_to_address(agent.wallet_provider.get_address())
+    app.middleware("http")(
+        create_x402_paywall(
+            build_routes("/api/x402/rates", "10000", _pay_to, description="Agent-sold data, 0.01 USAT")
+        )
+    )
+
+    @app.get("/api/x402/rates")
+    def paid_rates():
+        return {"message": "paid with x402 on Celo", "pay_to": _pay_to}
+
 
 class Chat(BaseModel):
     query: str
@@ -129,6 +143,9 @@ def status():
         "address": addr, "chain_id": settings.payments.chain_id,
         "cap": settings.payments.x402_max_amount_per_payment,
         "tag": x402_client.code_from_data_suffix(settings.payments.attribution_data_suffix),
+        "pay_to": settings.payments.x402_pay_to or addr,
+        "seller_asset": settings.payments.x402_seller_asset,
+        "erc8004_agent_id": settings.payments.erc8004_agent_id,
         "balances": bal,
     }
 

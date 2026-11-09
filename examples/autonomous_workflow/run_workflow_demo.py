@@ -58,8 +58,8 @@ def print_colored(message: str, color_type: str = "SYSTEM") -> None:
     print(f"{color}{message}{Style.RESET_ALL}")
 
 
-# Define Celo Sepolia USDC Contract Address
-CELO_SEPOLIA_USDC_ADDRESS = "0x01C5C0122039549AD1493B8220cABEdD739BC44E"
+# Define Celo mainnet USDC Contract Address
+CELO_USDC_ADDRESS = "0xcebA9300f2b948710d2653dD7B07f33A8B32118C"
 
 # Define Capabilities
 GENERAL_RESEARCH = Capability(
@@ -161,8 +161,8 @@ async def setup_agents() -> Tuple[AIAgent, AIAgent, TelegramAIAgent, HumanAgent]
         personality=f"""You are a workflow orchestrator. You interact with other agents to complete tasks. You are responsible for managing payments and returning results.
         If a payment is made, provide the amount and the transaction hash in your response.
 
-        **Payment Details (USDC on Celo Sepolia):**
-        - Contract: {CELO_SEPOLIA_USDC_ADDRESS}
+        **Payment Details (USDC on Celo):**
+        - Contract: {CELO_USDC_ADDRESS}
         - Amount: 6 decimals. 1 USDC = '1000000'.
         """,
     )
@@ -223,7 +223,7 @@ async def setup_agents() -> Tuple[AIAgent, AIAgent, TelegramAIAgent, HumanAgent]
 - **For conceptual topics or general questions:** Adapt the structure logically. Focus on defining the concept, explaining key aspects, providing examples, discussing benefits/drawbacks, listing sources, and offering a concluding summary.
 - **Always include Sources Consulted.**
 
-Your fee is 2 USDC (Celo Sepolia). When responding, state your fee.""",
+Your fee is 2 USDC (Celo). When responding, state your fee.""",
         custom_tools=[
             TavilySearchResults(api_key=tavily_api_key, max_results=5),
             RequestsGetTool(
@@ -268,7 +268,7 @@ Your fee is 2 USDC (Celo Sepolia). When responding, state your fee.""",
         identity=AgentIdentity.create_key_based(),
         enable_payments=True,
         personality="""You are a Telegram Broadcast Specialist. You broadcast messages to all regestered Telegram groups. \
-            Your fee is 1 USDC (Celo Sepolia). After broadcasting, state your fee in your response.""",
+            Your fee is 1 USDC (Celo). After broadcasting, state your fee in your response.""",
         telegram_token=telegram_token,
     )
 

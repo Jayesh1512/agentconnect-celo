@@ -273,8 +273,20 @@ class PaymentsSettings(BaseModel):
         description="Directory for persisting agent wallet data.",
     )
     chain_id: str = Field(
-        default="11142220",
-        description="EVM chain id for payments. Celo Sepolia=11142220, Celo mainnet=42220.",
+        default="42220",
+        description="EVM chain id for payments. Celo mainnet=42220 (default), Celo Sepolia testnet=11142220.",
+    )
+    x402_seller_asset: str = Field(
+        default="USAT",
+        description="Stablecoin an agent charges in when it sells over x402 (USAT, USDC or USDT).",
+    )
+    x402_pay_to: str = Field(
+        default="",
+        description="payTo address for x402 sales; empty means the agent's own wallet.",
+    )
+    erc8004_agent_id: str = Field(
+        default="",
+        description="ERC-8004 agent id of this deployment's identity (informational).",
     )
     x402_max_amount_per_payment: str = Field(
         default="$0.50",
@@ -285,8 +297,8 @@ class PaymentsSettings(BaseModel):
         description="Optional ERC-8021 attribution suffix (0x-hex) appended to every transaction's calldata, e.g. the `celo.dataSuffix` from `loops project get`.",
     )
     rpc_url: str = Field(
-        default="https://forno.celo-sepolia.celo-testnet.org",
-        description="JSON-RPC endpoint for the payments chain (Celo Forno by default).",
+        default="https://forno.celo.org",
+        description="JSON-RPC endpoint for the payments chain (Celo mainnet Forno by default).",
     )
 
     @field_validator("default_token_symbol")

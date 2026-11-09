@@ -40,9 +40,24 @@ OPENAI_API_KEY=... uvicorn demos.x402_demo.app:app --port 8765
 
 Fund the agent wallet with a little CELO (gas) and USDC/USA₮ first. Do not expose the demo app publicly: it spends from a real wallet.
 
+## Seller side (USA₮ via the Celo facilitator)
+
+`agentconnect/utils/x402_seller.py` protects a FastAPI route with x402, priced in **USA₮** by default (`payments.x402_seller_asset`), with `payTo` set to the agent wallet (`payments.x402_pay_to`, default = the agent's own address, [`0x1bBd…899F`](https://celoscan.io/address/0x1bBd102f47a02c3604C433B999Ef867A89b7899F)) and our attribution code declared as the app code (ERC-8021 builder-code extension). Token addresses and EIP-712 domains are in `agentconnect/utils/celo_tokens.py`.
+
+Verified against the live Celo mainnet facilitator (`https://api.x402.celo.org`): an unpaid request returns `402` for USA₮ → `payTo` = the agent wallet, and a payment from an unfunded buyer reaches the facilitator's `/verify` and is correctly rejected (`insufficient_funds`).
+**Settlement requires an `X402_API_KEY`** (a human creates it at x402.celo.org), which we did not have, so no USA₮ has been received yet.
+
+## ERC-8004 tooling
+
+`agentconnect/utils/erc8004.py` builds the registration file, stores it on-chain as a `data:` URI, and registers it from the agent wallet (`register_agent`), reading the agent id from the `Registered` event. Agent #10067 was registered from the agent wallet (a one-off script using the same registry call); the id is recorded in `agentconnect.yaml` (`payments.erc8004_agent_id`).
+
+## Defaults
+
+`agentconnect.yaml` is committed: Celo **mainnet** (`42220`, `https://forno.celo.org`), the attribution suffix **turned on**, USA₮ as the seller asset, the $0.50 buyer cap. The library defaults are mainnet too.
+
 ## What is not done
 
-- **No x402 seller side.** Nothing here serves a paid endpoint through the Celo facilitator, so there is no independent payer, no repeat counterparty, and no USA₮ received. The USA₮ settlement above is an *outbound* payment.
+- **No settled sale yet.** Without a facilitator API key there is no independent payer, no repeat counterparty, and no USA₮ received. The USA₮ settlement above is an *outbound* payment.
 - **x402 settlements are not tagged** (see above); only the direct transactions are.
 - **No named end user** yet; the demo task is a generic "pay a third-party rates API".
 - The repo's own test suite has not been run against these changes; the x402 client was exercised with a local fake seller and the live Celo Sepolia facilitator's `/verify`.

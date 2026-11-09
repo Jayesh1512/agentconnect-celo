@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Payments now run on Celo (default Celo Sepolia) using a local-key `EthAccountWalletProvider` instead of Coinbase CDP wallets on Base. Configure with `payments.chain_id` / `payments.rpc_url`. CDP API keys are no longer used; existing CDP wallet files are not compatible.
 
 ### Added
+- x402 **seller** helpers (`agentconnect.utils.x402_seller`): charge in USA₮ (default) through the Celo facilitator with `payTo` = the agent wallet; Celo token registry (`celo_tokens`); ERC-8004 identity tooling (`erc8004`); committed Celo-mainnet `agentconnect.yaml` with the attribution suffix on; `x402` added to dependencies; library defaults are now Celo **mainnet**.
 - x402 buyer support: `pay_for_x402_resource` agent tool and `agentconnect.utils.x402_client` (pays HTTP 402 endpoints via a facilitator such as x402.celo.org), with a per-payment cap (`payments.x402_max_amount_per_payment`), x402 v1 support, token choice, and the ERC-8021 builder-code extension so your attribution code rides in each payment.
 - Optional ERC-8021 attribution suffix on every transaction (`payments.attribution_data_suffix`).
 

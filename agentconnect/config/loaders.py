@@ -205,12 +205,15 @@ registry:
       type: "in_memory"
 
 # Payments configuration
-# Agent wallets are local keys on Celo (no API keys). Celo mainnet: chain_id "42220",
-# rpc_url "https://forno.celo.org".
+# Agent wallets are local keys on Celo mainnet (no API keys). Celo Sepolia testnet:
+# chain_id "11142220", rpc_url "https://forno.celo-sepolia.celo-testnet.org".
 payments:
   default_token_symbol: "USDC"      # e.g., USDC or CELO; drives ERC-20 vs native tools
-  chain_id: "11142220"              # Celo Sepolia (testnet)
-  rpc_url: "https://forno.celo-sepolia.celo-testnet.org"
+  chain_id: "42220"                 # Celo mainnet
+  rpc_url: "https://forno.celo.org"
+  x402_seller_asset: "USAT"         # token an agent charges in when selling over x402
+  x402_pay_to: ""                   # payTo for x402 sales (empty = the agent wallet)
+  erc8004_agent_id: ""              # ERC-8004 identity id (informational)
   x402_max_amount_per_payment: "$0.50"  # per-payment cap when an agent pays an x402 (HTTP 402) endpoint
   attribution_data_suffix: ""       # optional ERC-8021 suffix (0x...) appended to every tx
   wallet_data_dir: "data/agent_wallets"  # where agent wallets are stored (non-secret path)

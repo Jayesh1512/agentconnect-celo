@@ -39,7 +39,7 @@ When created with `enable_payments=True`, the `AIAgent` integrates payment capab
 - **Wallet Setup**: Triggers wallet initialization in `BaseAgent.__init__`
 - **AgentKit Tools**: Payment tools (e.g., `native_transfer`, `erc20_transfer`) are automatically added to the agent's workflow in `AIAgent._initialize_workflow`
 - **LLM Decision Making**: The agent's LLM decides when to use payment tools based on prompt instructions in templates like `CORE_DECISION_LOGIC` and `PAYMENT_CAPABILITY_TEMPLATE`
-- **Network Support**: Defaults to Celo Sepolia testnet; set `payments.chain_id` / `payments.rpc_url` for other EVM chains (e.g. Celo mainnet)
+- **Network Support**: Defaults to Celo mainnet (chain 42220); set `payments.chain_id` / `payments.rpc_url` for Celo Sepolia testnet
 - **Transaction Verification**: Built-in transaction verification and confirmation
 
 ### HumanAgent

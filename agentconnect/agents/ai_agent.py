@@ -339,8 +339,8 @@ class AIAgent(BaseAgent):
                         build_x402_tool(self.wallet_provider.account)
                     )
                 except ImportError:
-                    logger.info(
-                        "x402 tool disabled (pip install 'x402[requests,evm,extensions]') agent_id=%s",
+                    logger.warning(
+                        "x402 tool disabled: pip install 'x402[requests,evm,extensions]' agent_id=%s",
                         self.agent_id,
                     )
                 configured_symbol = global_settings.payments.default_token_symbol

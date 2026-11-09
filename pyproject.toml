@@ -60,6 +60,7 @@ dependencies = [
     "httpx (>=0.28.1,<0.29.0)",
     "pyyaml (>=6.0.2,<7.0.0)",
     "typer (>=0.16.1,<0.17.0)",
+    "x402[requests,evm,extensions,fastapi] (>=2.25.0,<3.0.0)",
 ]
 
 [project.scripts]

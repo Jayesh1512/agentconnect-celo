@@ -26,17 +26,19 @@ The AgentKit packages (no API keys needed; each agent holds a local key on `Celo
 
     pip install coinbase-agentkit coinbase-agentkit-langchain
 
-Pick the chain in ``agentconnect.yaml`` (defaults to Celo Sepolia testnet):
+Pick the chain in ``agentconnect.yaml`` (defaults to Celo mainnet):
 
 .. code-block:: yaml
 
     payments:
-      chain_id: "11142220"                                    # Celo Sepolia (testnet)
-      rpc_url: "https://forno.celo-sepolia.celo-testnet.org"
+      chain_id: "42220"                  # Celo mainnet (default)
+      rpc_url: "https://forno.celo.org"
+      # Celo Sepolia testnet: chain_id "11142220", rpc_url "https://forno.celo-sepolia.celo-testnet.org"
       # Celo mainnet: chain_id "42220", rpc_url "https://forno.celo.org"
 
-Fund the agent's address (``agent.profile.payment_address``) with testnet CELO from the
-`Celo faucet <https://faucet.celo.org>`_. Start on a testnet.
+Fund the agent's address (``agent.profile.payment_address``) with a little CELO for gas and
+the stablecoin it will spend. These are real funds on mainnet: start with a few cents, or switch
+to Celo Sepolia and use the `Celo faucet <https://faucet.celo.org>`_.
 
 Enabling Payments
 ---------------------
@@ -89,7 +91,7 @@ larger prices are refused before anything is signed. If
 payment (builder-code extension). Because the facilitator submits the transaction, the tag
 reaches the chain only when the seller declares the extension and the facilitator supports
 it; x402 v1 servers have no extensions. The buyer side needs no facilitator
-API key (the seller's server holds that). Test on Celo Sepolia first.
+API key (the seller's server holds that). Start with small amounts.
 
 Configuring Wallets
 -----------------------
@@ -270,7 +272,7 @@ Security Considerations
 - **Unencrypted storage**: wallet private keys are plain JSON on disk (file mode 0600) by default. Encrypt before
   production use with real funds.
 - **Wallet files**: keep ``wallet_data_dir`` out of version control.
-- **Testnets first**: use small amounts on Celo Sepolia before moving to mainnet.
+- **Small balances**: mainnet is the default, so keep agent wallets lightly funded (or use Celo Sepolia while developing).
 - **Access control**: anything that can construct an agent with ``enable_payments=True``
   can spend from that agent's wallet. Treat agent creation as a privileged action.
 

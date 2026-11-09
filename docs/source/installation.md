@@ -55,5 +55,5 @@ GOOGLE_API_KEY=your_google_api_key
 
 AgentConnect supports agent-to-agent payments on [Celo](https://celo.org) via Coinbase AgentKit. No API keys are needed: each agent gets a local wallet. Set `payments.chain_id` / `payments.rpc_url` in `agentconnect.yaml` to choose the chain.
 
-By default, payment features use the Celo Sepolia testnet, which is suitable for development and testing without real currency. Fund agent wallets from the [Celo faucet](https://faucet.celo.org).
+By default, payment features use Celo mainnet (real funds: keep agent wallets lightly funded). To develop on the Celo Sepolia testnet instead, set `payments.chain_id: "11142220"` and fund wallets from the [Celo faucet](https://faucet.celo.org).
 

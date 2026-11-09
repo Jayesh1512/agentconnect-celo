@@ -52,7 +52,7 @@ python examples/data_analysis_assistant.py
 # Telegram multi-agent system (requires TELEGRAM_BOT_TOKEN)
 python examples/multi_agent/multi_agent_system.py
 
-# Autonomous Workflow with Agent Economy (uses Celo Sepolia; fund agent wallets from the Celo faucet)
+# Autonomous Workflow with Agent Economy (uses Celo mainnet by default; fund agent wallets lightly, or set Celo Sepolia in `agentconnect.yaml`)
 python examples/autonomous_workflow/run_workflow_demo.py
 ```
 
@@ -93,7 +93,7 @@ python examples/autonomous_workflow/run_workflow_demo.py
 *   **Description:** Demonstrates a complete autonomous workflow featuring:
     *   Capability-based agent discovery.
     *   A user proxy orchestrating tasks between specialized agents (Research, Telegram Broadcast).
-    *   Automated Agent-to-Agent (A2A) cryptocurrency payments (USDC on Celo Sepolia testnet) using Coinbase AgentKit.
+    *   Automated Agent-to-Agent (A2A) cryptocurrency payments (USDC on Celo) using Coinbase AgentKit.
 *   **Requires:** LLM key(s), `TELEGRAM_BOT_TOKEN`, `TAVILY_API_KEY` set in `.env`.
     *   **Telegram Token:** See instructions in the `telegram` example section above.
     *   **Wallets:** No keys needed. Agent wallets are created locally; fund their addresses with testnet CELO/USDC from the [Celo faucet](https://faucet.celo.org).

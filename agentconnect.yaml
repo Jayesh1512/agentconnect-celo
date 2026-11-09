@@ -1,0 +1,11 @@
+# Celo mainnet deployment of this fork (public values only; no secrets).
+payments:
+  default_token_symbol: "USDC"
+  chain_id: "42220"
+  rpc_url: "https://forno.celo.org"
+  x402_seller_asset: "USAT"
+  x402_pay_to: ""            # empty = the agent wallet 0x1bBd102f47a02c3604C433B999Ef867A89b7899F
+  erc8004_agent_id: "10067"
+  x402_max_amount_per_payment: "$0.50"
+  # ERC-8021 suffix for attribution tag celo_7fc842cb4087, appended to every transaction
+  attribution_data_suffix: "0x63656c6f5f376663383432636234303837110080218021802180218021802180218021"
