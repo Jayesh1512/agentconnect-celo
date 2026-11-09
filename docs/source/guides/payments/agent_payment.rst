@@ -16,6 +16,9 @@ and a published payment address.
    - Costs and payment instructions live in the agent's ``profile`` and ``personality``;
      the LLM decides when to charge or pay based on that context.
    - Wallets persist to disk between restarts. Same agent ID, same wallet.
+   - Payments run on **Celo mainnet** by default (``payments.chain_id: "42220"``): local-key wallets,
+     x402 buying and selling (USA₮ by default) through Celo's facilitator, an ERC-8004 identity,
+     and an ERC-8021 attribution suffix on every transaction the agent sends.
 
 Prerequisites
 -----------------
@@ -92,6 +95,54 @@ payment (builder-code extension). Because the facilitator submits the transactio
 reaches the chain only when the seller declares the extension and the facilitator supports
 it; x402 v1 servers have no extensions. The buyer side needs no facilitator
 API key (the seller's server holds that). Start with small amounts.
+
+Attribution (ERC-8021)
+--------------------------
+
+Set ``payments.attribution_data_suffix`` to the ERC-8021 suffix for your code (for example the
+``celo.dataSuffix`` from Loops). Every transaction the agent sends itself (token transfers, native
+transfers, swaps, ERC-8004 registration) then carries it. Check one transaction with
+``verifyTx`` from ``@celo/attribution-tags``.
+
+x402 payments are different: the *facilitator* submits those transactions, so the buyer's suffix
+cannot be appended. The buyer attaches its code to the payment (builder-code extension), and it
+reaches the chain only if the seller declares the extension and the facilitator supports it.
+
+Selling over x402 (USA₮)
+----------------------------
+
+An agent can charge for a route and get paid into its own wallet:
+
+.. code-block:: python
+
+    from fastapi import FastAPI
+    from agentconnect.utils.x402_seller import build_routes, create_x402_paywall, pay_to_address
+
+    pay_to = pay_to_address(agent.wallet_provider.get_address())   # payments.x402_pay_to or the agent wallet
+    routes = build_routes("/api/rates", "10000", pay_to)           # 0.01 USA₮ (6 decimals), payments.x402_seller_asset
+    app = FastAPI()
+    app.middleware("http")(create_x402_paywall(routes))
+
+An unpaid request gets ``402`` with the price, asset and ``payTo``. Settlement goes through Celo's
+hosted facilitator (``https://api.x402.celo.org`` on mainnet) and needs an ``X402_API_KEY``, which a
+human creates at https://x402.celo.org. Without it the route still issues challenges and verifies
+payments, but the facilitator rejects settlement. ``agentconnect/utils/celo_tokens.py`` holds the
+supported tokens (USDC, USDT, USAT on mainnet; USDC on Celo Sepolia).
+
+ERC-8004 identity
+---------------------
+
+``agentconnect.utils.erc8004`` registers the agent in the ERC-8004 Identity Registry on Celo from
+the agent wallet (which then owns the identity NFT):
+
+.. code-block:: python
+
+    from agentconnect.utils import erc8004
+
+    card = erc8004.build_agent_card("My agent", "What it does", [{"name": "web", "endpoint": "https://…"}])
+    agent_id = erc8004.register_agent(agent.wallet_provider, erc8004.card_to_data_uri(card))
+
+Record the returned id in ``payments.erc8004_agent_id``.
 
 Configuring Wallets
 -----------------------

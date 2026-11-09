@@ -17,7 +17,7 @@ def skip_private_members(app, what, name, obj, skip, options):
         return True
     if hasattr(obj, "__doc__") and obj.__doc__ and ":private:" in obj.__doc__:
         return True
-    if name == "__init__" and obj.__objclass__ is object:
+    if name == "__init__" and getattr(obj, "__objclass__", None) is object:
         # dont document default init
         return True
     return None

@@ -10,6 +10,10 @@ utils/
 ├── interaction_control.py # Rate limiting and interaction tracking
 ├── payment_helper.py     # Payment utilities for AgentKit validation and agent payment readiness
 ├── wallet_manager.py     # Agent wallet persistence utilities
+├── celo_tokens.py        # Celo stablecoin registry (USDC, USDT, USAT) with EIP-712 domains
+├── x402_client.py        # x402 buyer: pay HTTP 402 endpoints from the agent wallet
+├── x402_seller.py        # x402 seller: charge in USA₮ via the Celo facilitator
+└── erc8004.py            # ERC-8004 agent identity registration on Celo
 └── README.md             # This file
 ```
 
@@ -45,10 +49,18 @@ The payment helper module provides utility functions for setting up and managing
 - **Backup Utilities**: Create backups of wallet data
 
 Key functions:
-- `verify_payment_environment()`: Check required environment variables
+- `verify_payment_environment()`: Kept for compatibility; payments use a local key wallet, so no API keys are required
+- `append_data_suffix()` / `code_from_data_suffix()`: Attach or decode the ERC-8021 attribution suffix
 - `validate_cdp_environment()`: Validate that the AgentKit packages are installed
 - `check_agent_payment_readiness()`: Check if an agent can make payments
 - `backup_wallet_data()`: Create backup of wallet data
+
+### Celo x402 and identity helpers
+
+- `celo_tokens.get_token(chain_id, symbol)`: token address, decimals and EIP-712 name/version for USDC, USDT, USAT on Celo
+- `x402_client.create_x402_session(account, chain_id, max_amount, prefer_asset)`: `requests` session that pays 402 responses (x402 v1 and v2) with a per-payment cap; `build_x402_tool(account)` returns the agent tool
+- `x402_seller.build_routes(...)` / `create_x402_paywall(routes)`: FastAPI middleware that charges in USA₮ (default) with `payTo` = the agent wallet, settled through the Celo facilitator (needs `X402_API_KEY` for settlement)
+- `erc8004.build_agent_card()` / `card_to_data_uri()` / `register_agent(wallet_provider, uri)`: register an ERC-8004 identity from the agent wallet and return the agent id
 
 ### Wallet Manager (`wallet_manager.py`)
 

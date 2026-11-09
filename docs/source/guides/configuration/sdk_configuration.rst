@@ -106,6 +106,13 @@ YAML reference
     payments:
       default_token_symbol: "USDC"
       wallet_data_dir: "data/agent_wallets"
+      chain_id: "42220"                  # Celo mainnet (default); Celo Sepolia is "11142220"
+      rpc_url: "https://forno.celo.org"
+      x402_max_amount_per_payment: "$0.50"   # buyer cap per x402 payment
+      x402_seller_asset: "USAT"              # token charged when selling over x402
+      x402_pay_to: ""                        # payTo for sales (empty = the agent wallet)
+      erc8004_agent_id: ""                   # ERC-8004 identity id (informational)
+      attribution_data_suffix: ""            # ERC-8021 suffix appended to every transaction
 
 See the `full example file <https://github.com/AKKI0511/AgentConnect/blob/main/agentconnect/config/agentconnect.example.yaml>`_
 or :mod:`agentconnect.config.models` for field-level descriptions and constraints.

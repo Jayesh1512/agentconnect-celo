@@ -78,6 +78,9 @@ agentconnect config init|show|validate <file>
   - `default_token_symbol` (normalized to uppercase; drives ERC-20 vs native)
   - `wallet_data_dir` (path for wallet key files; keep out of version control)
   - `x402_max_amount_per_payment` (per-payment cap for x402 purchases, default `$0.50`)
+  - `x402_seller_asset` (token an agent charges in when selling over x402: `USAT` (default), `USDC` or `USDT`)
+  - `x402_pay_to` (payTo address for x402 sales; empty = the agent's own wallet)
+  - `erc8004_agent_id` (informational: the ERC-8004 identity id of this deployment)
   - `attribution_data_suffix` (optional ERC-8021 suffix appended to every transaction's calldata)
   - `chain_id` / `rpc_url` (default Celo mainnet `42220` / `https://forno.celo.org`; Celo Sepolia testnet is `11142220`)
 
@@ -118,6 +121,13 @@ registry:
 payments:
   default_token_symbol: "USDC"
   wallet_data_dir: "data/agent_wallets"
+  chain_id: "42220"                  # Celo mainnet (default)
+  rpc_url: "https://forno.celo.org"
+  x402_max_amount_per_payment: "$0.50"
+  x402_seller_asset: "USAT"
+  x402_pay_to: ""                    # empty = the agent wallet
+  erc8004_agent_id: ""
+  attribution_data_suffix: ""        # ERC-8021 suffix (0x…) appended to every transaction
 
 communication:
   enable_message_history: true
