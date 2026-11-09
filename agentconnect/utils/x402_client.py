@@ -14,6 +14,8 @@ from agentconnect.config import settings as global_settings
 
 logger = logging.getLogger(__name__)
 
+_V1_NETWORK = {"42220": "celo", "11142220": "celo-sepolia"}
+
 
 def create_x402_session(account: Any, chain_id: Optional[str] = None, max_amount: Optional[str] = None):
     """
@@ -30,14 +32,21 @@ def create_x402_session(account: Any, chain_id: Optional[str] = None, max_amount
     from x402 import SchemeRegistration, x402ClientConfig
     from x402.http.clients import wrapRequestsWithPaymentFromConfig
     from x402.mechanisms.evm.exact import ExactEvmClientScheme
+    from x402.mechanisms.evm.exact.v1 import ExactEvmSchemeV1Client
 
     payments = global_settings.payments
+    chain_id = chain_id or payments.chain_id
     config = x402ClientConfig(
         schemes=[
             SchemeRegistration(
-                network=f"eip155:{chain_id or payments.chain_id}",
-                client=ExactEvmClientScheme(account),
-            )
+                network=f"eip155:{chain_id}", client=ExactEvmClientScheme(account)
+            ),
+            # x402 v1 servers (e.g. the buy gateway) name the network "celo"
+            SchemeRegistration(
+                network=_V1_NETWORK[chain_id],
+                client=ExactEvmSchemeV1Client(account),
+                x402_version=1,
+            ),
         ],
         spend_controls={
             "max_amount_per_payment": max_amount or payments.x402_max_amount_per_payment
