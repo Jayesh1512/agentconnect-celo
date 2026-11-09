@@ -1,0 +1,42 @@
+<!doctype html><html><head><meta charset="utf-8"><title>AgentConnect · x402 on Celo</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0a0a0a;color:#f4f4ef;font:16px/1.5 'Avenir Next','Helvetica Neue',sans-serif}
+header{padding:20px 32px;border-bottom:1px solid #2b3320;display:flex;justify-content:space-between;align-items:center}
+h1{font-size:20px;margin:0}h1 span{color:#FCFF52}
+.pill{background:#14180f;border:1px solid #2b3320;border-radius:999px;padding:6px 14px;font-size:13px;color:#c9ccc0;margin-left:8px;font-family:Menlo,monospace}
+.pill b{color:#FCFF52;font-weight:600}
+main{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;padding:24px 32px;height:calc(100vh - 140px)}
+.card{background:#101409;border:1px solid #2b3320;border-radius:18px;padding:20px;display:flex;flex-direction:column;min-height:0}
+.card h2{margin:0 0 12px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#FCFF52}
+#chat,#tl{flex:1;overflow:auto}
+.msg{margin:10px 0;padding:12px 16px;border-radius:14px;max-width:92%;white-space:pre-wrap}
+.u{background:#1d2410;margin-left:auto}.a{background:#171b12;border:1px solid #2b3320}
+form{display:flex;gap:10px;margin-top:12px}input{flex:1;background:#0a0a0a;border:1px solid #2b3320;border-radius:12px;padding:14px;color:#fff;font-size:15px}
+button{background:#FCFF52;color:#0a0a0a;border:0;border-radius:12px;padding:0 22px;font-weight:700;font-size:15px;cursor:pointer}
+.ev{padding:10px 12px;border-left:3px solid #2b3320;margin:8px 0;font-size:14px;color:#c9ccc0;font-family:Menlo,monospace;word-break:break-all}
+.ev.pay{border-color:#FCFF52;color:#f4f4ef}.ev.ok{border-color:#7CFF8A}.ev b{color:#FCFF52}
+a{color:#7CFF8A}.dim{color:#8b8f84}
+</style></head><body>
+<header><h1>AgentConnect <span>on Celo</span> · x402 payments</h1><div id="st"></div></header>
+<main>
+<div class="card"><h2>Agent chat</h2><div id="chat"></div>
+<form id="f"><input id="q" autocomplete="off" placeholder="Ask the agent…"><button>Send</button></form></div>
+<div class="card"><h2>Payment activity (live)</h2><div id="tl"><div class="ev dim">Waiting for the agent…</div></div></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);let n=0;
+async function status(){const s=await (await fetch('/api/status')).json();
+$('#st').innerHTML=`<span class=pill>wallet <b>${s.address.slice(0,6)}…${s.address.slice(-4)}</b></span><span class=pill>CELO <b>${s.balances.CELO.toFixed(2)}</b></span><span class=pill>USDC <b>${s.balances.USDC.toFixed(3)}</b></span><span class=pill>USA₮ <b>${s.balances.USAT.toFixed(3)}</b></span><span class=pill>cap <b>${s.cap}</b></span><span class=pill>tag <b>${s.tag}</b></span>`}
+function ev(cls,html){const d=document.createElement('div');d.className='ev '+cls;d.innerHTML=html;$('#tl').appendChild(d);$('#tl').scrollTop=1e9}
+function msg(c,t){const d=document.createElement('div');d.className='msg '+c;d.textContent=t;$('#chat').appendChild(d);$('#chat').scrollTop=1e9}
+async function poll(){const r=await (await fetch('/api/events?since='+n)).json();
+for(const e of r){n=e.n+1;
+if(e.kind=='thinking')ev('','🤔 agent thinking…');
+if(e.kind=='tool_call')ev('pay',`→ <b>${e.tool}</b>(${e.url})<br><span class=dim>402 → sign stablecoin authorization → retry</span>`);
+if(e.kind=='tool_result')ev('ok',`← HTTP <b>${e.status}</b>`+(e.tx?`<br>settled on Celo: <a target=_blank href="https://celoscan.io/tx/${e.tx}">${e.tx.slice(0,10)}…${e.tx.slice(-6)}</a>`:'')+`<br><span class=dim>${(e.body||'').slice(0,160)}</span>`);
+if(e.kind=='error')ev('',`⚠ ${e.text}`);}
+status().catch(()=>{});}
+setInterval(poll,700);status();
+$('#f').onsubmit=async ev0=>{ev0.preventDefault();const q=$('#q').value.trim();if(!q)return;$('#q').value='';msg('u',q);
+const r=await (await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({query:q})})).json();msg('a',r.answer);status()};
+</script></body></html>
