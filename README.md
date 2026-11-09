@@ -1,3 +1,5 @@
+> **Celo hackathon entry:** this fork runs agent payments (incl. x402) on Celo mainnet. See [CELO.md](CELO.md).
+
 > [!IMPORTANT]
 > ## 🚧 New Architecture Coming Soon — v0.5
 >
