@@ -60,4 +60,4 @@ Verified against the live Celo mainnet facilitator (`https://api.x402.celo.org`)
 - **No settled sale yet.** Without a facilitator API key there is no independent payer, no repeat counterparty, and no USA₮ received. The USA₮ settlement above is an *outbound* payment.
 - **x402 settlements are not tagged** (see above); only the direct transactions are.
 - **No named end user** yet; the demo task is a generic "pay a third-party rates API".
-- The repo's own test suite has not been run against these changes; the x402 client was exercised with a local fake seller and the live Celo Sepolia facilitator's `/verify`.
+- Tests: `tests/config`, `tests/utils` (new offline tests for attribution, token registry, seller routes, buyer cap, builder-code) and `tests/imports` pass (26) except `test_lazy_submodule_access_core`, which also fails on the unmodified upstream code. The rest of the suite was not run. The seller was exercised against the live Celo mainnet facilitator's challenge/verify only, not settlement.
