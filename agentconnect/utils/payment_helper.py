@@ -32,6 +32,19 @@ def append_data_suffix(transaction: Dict[str, Any], suffix: str) -> Dict[str, An
     return transaction
 
 
+def code_from_data_suffix(suffix: str) -> str:
+    """
+    Extract the attribution code from an ERC-8021 Schema 0 suffix
+    (``[code][length:1][schema:1][marker:16]``). Returns "" if it can't be decoded.
+    """
+    try:
+        raw = bytes.fromhex(suffix[2:] if suffix.startswith("0x") else suffix)
+        body, length = raw[:-18], raw[-18]
+        return body[-length:].decode() if raw[-17] == 0 and length else ""
+    except (ValueError, IndexError):
+        return ""
+
+
 def verify_payment_environment() -> bool:
     """
     Verify that the environment is ready for payments.

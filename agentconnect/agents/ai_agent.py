@@ -340,7 +340,7 @@ class AIAgent(BaseAgent):
                     )
                 except ImportError:
                     logger.info(
-                        "x402 tool disabled (pip install 'x402[requests,evm]') agent_id=%s",
+                        "x402 tool disabled (pip install 'x402[requests,evm,extensions]') agent_id=%s",
                         self.agent_id,
                     )
                 configured_symbol = global_settings.payments.default_token_symbol

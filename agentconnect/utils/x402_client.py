@@ -11,6 +11,7 @@ import logging
 from typing import Any, Optional
 
 from agentconnect.config import settings as global_settings
+from agentconnect.utils.payment_helper import code_from_data_suffix
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +37,9 @@ def create_x402_session(
             (e.g. USDC, USDT, USAT); otherwise the first offer is used.
     """
     import requests
-    from x402 import SchemeRegistration, x402ClientConfig
-    from x402.http.clients import wrapRequestsWithPaymentFromConfig
+    from x402 import SchemeRegistration, x402ClientConfig, x402ClientSync
+    from x402.extensions.builder_code import BuilderCodeClientExtension
+    from x402.http.clients import wrapRequestsWithPayment
     from x402.mechanisms.evm.exact import ExactEvmClientScheme
     from x402.mechanisms.evm.exact.v1 import ExactEvmSchemeV1Client
 
@@ -66,7 +68,15 @@ def create_x402_session(
             "max_amount_per_payment": max_amount or payments.x402_max_amount_per_payment
         },
     )
-    return wrapRequestsWithPaymentFromConfig(requests.Session(), config)
+    client = x402ClientSync.from_config(config)
+    # Attribution: x402 settlements are submitted by the facilitator, so the tag
+    # rides in the payment payload (ERC-8021 builder-code extension). It only lands
+    # on-chain if the seller declares it and the facilitator supports it; x402 v1
+    # servers have no extensions.
+    code = code_from_data_suffix(payments.attribution_data_suffix)
+    if code:
+        client.register_extension(BuilderCodeClientExtension(code))
+    return wrapRequestsWithPayment(requests.Session(), client)
 
 
 def build_x402_tool(account: Any):

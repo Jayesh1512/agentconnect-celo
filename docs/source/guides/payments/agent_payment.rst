@@ -81,10 +81,14 @@ CELO for these payments.
 
 .. code-block:: bash
 
-    pip install "x402[requests,evm]"
+    pip install "x402[requests,evm,extensions]"
 
 Each payment is capped by ``payments.x402_max_amount_per_payment`` (default ``$0.50``);
-larger prices are refused before anything is signed. The buyer side needs no facilitator
+larger prices are refused before anything is signed. If
+``payments.attribution_data_suffix`` is set, the buyer also attaches its ERC-8021 code to the
+payment (builder-code extension). Because the facilitator submits the transaction, the tag
+reaches the chain only when the seller declares the extension and the facilitator supports
+it; x402 v1 servers have no extensions. The buyer side needs no facilitator
 API key (the seller's server holds that). Test on Celo Sepolia first.
 
 Configuring Wallets
