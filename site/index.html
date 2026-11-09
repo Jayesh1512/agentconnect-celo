@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AgentConnect on Celo — agents that pay their way</title>
+<meta name="description" content="Open-source agent framework where AI agents pay web services over x402 on Celo mainnet, from their own wallet, with a spend cap.">
+<meta property="og:title" content="AgentConnect on Celo"><meta property="og:description" content="Agents that pay web services over x402 on Celo mainnet, from their own wallet, with a spend cap.">
+<link rel="icon" href="favicon.png">
+<style>
+:root{--y:#FCFF52;--bg:#0a0a0a;--card:#101409;--line:#2b3320;--tx:#f4f4ef;--dim:#8b8f84;--ok:#7CFF8A;--bad:#ff8a7c}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(1100px 600px at 80% -10%,#1d2410 0%,var(--bg) 60%);color:var(--tx);font:17px/1.55 'Avenir Next','Helvetica Neue',system-ui,sans-serif}
+a{color:var(--y);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0}
+nav .b{display:flex;gap:12px;align-items:center;font-weight:800;font-size:18px}nav img{width:36px;height:36px;border-radius:9px}
+nav .l a{margin-left:22px;font-size:15px;color:var(--dim)}
+.hero{padding:70px 0 40px}
+.hero h1{font-size:clamp(44px,8vw,92px);line-height:1;margin:0;font-weight:800;letter-spacing:-.035em}
+.hero h1 span{color:var(--y)}.hero p{font-size:22px;color:#c9ccc0;max-width:720px;margin:26px 0 0}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+.btn{display:inline-block;padding:13px 22px;border-radius:12px;font-weight:700;font-size:16px;border:1px solid var(--line);color:var(--tx)}
+.btn.p{background:var(--y);color:#0a0a0a;border-color:var(--y)}.btn:hover{text-decoration:none;filter:brightness(1.1)}
+h2{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--y);margin:70px 0 18px;font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
+.grid{display:grid;gap:16px}.g4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card .n{color:var(--y);font-size:13px;letter-spacing:.14em}.card h3{margin:8px 0 6px;font-size:22px}.card p{margin:0;color:#a9ad9f;font-size:15px}
+.mono{font-family:Menlo,'SF Mono',monospace}
+.pill{display:inline-block;background:#14180f;border:1px solid var(--line);border-radius:999px;padding:6px 14px;margin:4px 6px 4px 0;font-size:14px}.pill b{color:var(--y)}
+.live .v{font-size:34px;font-weight:800}.live .k{color:var(--dim);font-size:13px;letter-spacing:.1em}
+table{width:100%;border-collapse:collapse;font-size:15px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--dim);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.ok{color:var(--ok)}.no{color:var(--bad)}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;counter-reset:s}
+.flow div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;counter-increment:s}.flow div:before{content:"STEP " counter(s);display:block;color:var(--y);font-size:12px;letter-spacing:.14em;margin-bottom:8px}
+.flow b{display:block;font-size:18px;margin-bottom:4px}.flow span{color:#a9ad9f;font-size:14px}
+video{width:100%;border-radius:18px;border:1px solid var(--line);background:#000}
+ul.gaps li{margin:8px 0;color:#c9ccc0}
+footer{margin:80px 0 40px;color:var(--dim);font-size:14px;border-top:1px solid var(--line);padding-top:24px}
+</style></head><body><div class="wrap">
+<nav><div class="b"><img src="icon.svg" alt=""> AgentConnect</div><div class="l"><a href="#live">Live</a><a href="#how">How it works</a><a href="#proof">Proof</a><a href="#video">Video</a><a href="https://github.com/Jayesh1512/agentconnect-celo">GitHub</a></div></nav>
+
+<section class="hero">
+<h1>Agents that<br><span>pay their way.</span></h1>
+<p>AgentConnect is an open-source framework where AI agents discover each other — and now pay web services over <b>x402 on Celo mainnet</b>, from their own wallet, with a hard spend cap.</p>
+<div class="cta"><a class="btn p" href="https://github.com/Jayesh1512/agentconnect-celo">View the code</a><a class="btn" href="#video">Watch the demo</a><a class="btn" href="https://celoscan.io/address/0x1bBd102f47a02c3604C433B999Ef867A89b7899F">Agent wallet on Celoscan</a></div>
+<div style="margin-top:26px"><span class="pill">Celo mainnet · 42220</span><span class="pill">ERC-8004 <b>#10067</b></span><span class="pill">tag <b>celo_7fc842cb4087</b></span><span class="pill">x402 · USDC · USA₮</span></div>
+</section>
+
+<h2 id="live">Live from the chain</h2>
+<div class="grid g4 live">
+<div class="card"><div class="k">AGENT WALLET</div><div class="v mono" style="font-size:18px;margin-top:10px;word-break:break-all"><a href="https://celoscan.io/address/0x1bBd102f47a02c3604C433B999Ef867A89b7899F">0x1bBd…899F</a></div></div>
+<div class="card"><div class="k">CELO (GAS)</div><div class="v" id="b-celo">…</div></div>
+<div class="card"><div class="k">USDC</div><div class="v" id="b-usdc">…</div></div>
+<div class="card"><div class="k">USA₮</div><div class="v" id="b-usat">…</div></div>
+</div>
+<p style="color:var(--dim);font-size:14px;margin:12px 0 0">Read-only balances fetched in your browser from Celo’s public RPC. <span id="blk"></span> This site holds no keys and cannot spend.</p>
+
+<h2 id="how">How an agent pays</h2>
+<div class="flow">
+<div><b>Calls a service</b><span>GET /resource</span></div>
+<div><b>Gets a 402</b><span>Payment Required + price</span></div>
+<div><b>Signs</b><span>A stablecoin authorization from its own wallet — if it’s under the cap</span></div>
+<div><b>Celo facilitator settles</b><span>On-chain, and it pays the gas</span></div>
+<div><b>Gets the answer</b><span>HTTP 200 + receipt with the tx hash</span></div>
+</div>
+
+<h2>What every agent gets</h2>
+<div class="grid g4">
+<div class="card"><div class="n">01</div><h3>Own wallet</h3><p>A local-key wallet on Celo mainnet. No API keys.</p></div>
+<div class="card"><div class="n">02</div><h3>Identity</h3><p>An ERC-8004 identity registered from the agent wallet.</p></div>
+<div class="card"><div class="n">03</div><h3>Attribution</h3><p>An ERC-8021 tag on every transaction the agent sends.</p></div>
+<div class="card"><div class="n">04</div><h3>x402 buy &amp; sell</h3><p>Pays 402 endpoints (v1/v2) with a per-payment cap; sells in USA₮ via the Celo facilitator.</p></div>
+</div>
+
+<h2 id="proof">Proof on mainnet</h2>
+<div class="card" style="padding:8px 18px;overflow-x:auto"><table>
+<tr><th>What</th><th>Transaction</th><th>Tag</th></tr>
+<tr><td>0.01 USDC self-transfer via the agent wallet</td><td class="mono"><a href="https://celoscan.io/tx/0x25b5cda00ad590f5441901700eebc528beb40d52293e1059d918147f4090ed6a">0x25b5…ed6a</a></td><td class="ok">✓ tagged</td></tr>
+<tr><td>ERC-8004 identity registration (#10067)</td><td class="mono"><a href="https://celoscan.io/tx/0xa1b8472cb9362c15367f26b5ac96f64c77fb87d9c524957a86e3069c44d0af7e">0xa1b8…af7e</a></td><td class="ok">✓ tagged</td></tr>
+<tr><td>0.10 USDC → USA₮ swap</td><td class="mono"><a href="https://celoscan.io/tx/0xb2f032417735b9d3adaf06c947cae6f53f9c34c3afa066fba367176834c4dce0">0xb2f0…dce0</a></td><td class="ok">✓ tagged</td></tr>
+<tr><td>x402 payment to a third-party service — 0.016753 USDC, HTTP 200</td><td class="mono"><a href="https://celoscan.io/tx/0x58fbe13c459eebaf0cbc223c8da921debd172f9648ce1174d9ea123ac64fe8e7">0x58fb…e8e7</a></td><td class="no">not tagged*</td></tr>
+<tr><td>x402 payment to a third-party service — 0.016753 USA₮, HTTP 200</td><td class="mono"><a href="https://celoscan.io/tx/0x1cc83ef179927ca7a87678c155c7c252b2e4b112014bb604fef2306b886120ea">0x1cc8…20ea</a></td><td class="no">not tagged*</td></tr>
+</table></div>
+<p style="color:var(--dim);font-size:14px">*Both x402 settlements were submitted by Celo’s facilitator, so the agent can’t append its own suffix. Checked with <span class="mono">verifyTx</span> from <span class="mono">@celo/attribution-tags</span>.</p>
+
+<h2 id="video">Product video</h2>
+<video controls preload="metadata" poster="poster.jpg"><source src="overview.mp4" type="video/mp4"></video>
+
+<h2>Safety &amp; honest status</h2>
+<div class="grid g3">
+<div class="card"><h3>Guardrails</h3><p>Every payment is capped ($0.50 by default). A price above the cap is refused before anything is signed. Wallet key files are owner-only (0600).</p></div>
+<div class="card"><h3>Not done yet</h3><ul class="gaps" style="padding-left:18px;margin:6px 0 0"><li>No settled sale as a seller yet (needs a facilitator API key) — no independent payer or repeat counterparty.</li><li>x402 settlements aren’t tagged.</li><li>No named end user yet.</li></ul></div>
+<div class="card"><h3>Open source</h3><p>Python framework with Celo mainnet defaults, x402 buyer + seller helpers, ERC-8004 tooling and offline tests. See <a href="https://github.com/Jayesh1512/agentconnect-celo/blob/main/CELO.md">CELO.md</a>.</p></div>
+</div>
+
+<footer>AgentConnect on Celo · fork of <a href="https://github.com/AKKI0511/AgentConnect">AKKI0511/AgentConnect</a> · built for the Agents on Open Rails hackathon · <a href="https://8004scan.io/agents/celo/10067">ERC-8004 #10067</a></footer>
+</div>
+<script>
+const RPC="https://forno.celo.org",ME="0x1bBd102f47a02c3604C433B999Ef867A89b7899F";
+const rpc=(m,p)=>fetch(RPC,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",id:1,method:m,params:p})}).then(r=>r.json()).then(j=>j.result);
+const bal=(t)=>rpc("eth_call",[{to:t,data:"0x70a08231"+"0".repeat(24)+ME.slice(2).toLowerCase()},"latest"]).then(h=>Number(BigInt(h))/1e6);
+(async()=>{try{
+ const [c,u,t,b]=await Promise.all([rpc("eth_getBalance",[ME,"latest"]),bal("0xcebA9300f2b948710d2653dD7B07f33A8B32118C"),bal("0xD2ab3C9A02DBBAB236BfEC45D1d755DF4267F771"),rpc("eth_blockNumber",[])]);
+ document.getElementById("b-celo").textContent=(Number(BigInt(c))/1e18).toFixed(2);
+ document.getElementById("b-usdc").textContent=u.toFixed(3);document.getElementById("b-usat").textContent=t.toFixed(3);
+ document.getElementById("blk").textContent="Block "+parseInt(b,16).toLocaleString()+".";
+}catch(e){["b-celo","b-usdc","b-usat"].forEach(i=>document.getElementById(i).textContent="n/a")}})();
+</script></body></html>

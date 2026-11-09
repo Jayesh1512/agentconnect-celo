@@ -3,6 +3,7 @@
 Agents that discover each other and **pay web services over x402 on Celo mainnet**, from their own wallet, with a hard per-payment cap.
 Fork of [AKKI0511/AgentConnect](https://github.com/AKKI0511/AgentConnect); this repo moves its payments from Coinbase CDP wallets on Base to local-key wallets on Celo.
 
+- **Live site:** https://agentconnect-celo.vercel.app (static, read-only; source in `site/`, the video file is hosted there but not committed)
 - **Agent wallet (Celo mainnet):** [`0x1bBd102f47a02c3604C433B999Ef867A89b7899F`](https://celoscan.io/address/0x1bBd102f47a02c3604C433B999Ef867A89b7899F)
 - **ERC-8004 identity:** [agent #10067](https://8004scan.io/agents/celo/10067)
 - **Attribution tag:** `celo_7fc842cb4087`
