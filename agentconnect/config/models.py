@@ -272,6 +272,18 @@ class PaymentsSettings(BaseModel):
         default="data/agent_wallets",
         description="Directory for persisting agent wallet data.",
     )
+    chain_id: str = Field(
+        default="11142220",
+        description="EVM chain id for payments. Celo Sepolia=11142220, Celo mainnet=42220.",
+    )
+    attribution_data_suffix: str = Field(
+        default="",
+        description="Optional ERC-8021 attribution suffix (0x-hex) appended to every transaction's calldata, e.g. the `celo.dataSuffix` from `loops project get`.",
+    )
+    rpc_url: str = Field(
+        default="https://forno.celo-sepolia.celo-testnet.org",
+        description="JSON-RPC endpoint for the payments chain (Celo Forno by default).",
+    )
 
     @field_validator("default_token_symbol")
     @classmethod

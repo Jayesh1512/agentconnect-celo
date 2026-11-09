@@ -6,7 +6,6 @@ This module provides helper functions for setting up payment capabilities in age
 
 import json
 import logging
-import os
 import time
 from pathlib import Path
 from typing import Optional, Dict, Any, Union, Tuple
@@ -16,73 +15,62 @@ from agentconnect.utils import wallet_manager
 logger = logging.getLogger(__name__)
 
 
+def append_data_suffix(transaction: Dict[str, Any], suffix: str) -> Dict[str, Any]:
+    """
+    Append an ERC-8021 attribution suffix to a transaction's calldata (in place).
+
+    No-op when ``suffix`` is empty or the calldata already ends with it.
+    """
+    if not suffix:
+        return transaction
+    suffix_hex = suffix[2:] if suffix.startswith("0x") else suffix
+    data = transaction.get("data") or "0x"
+    data_hex = data.hex() if isinstance(data, (bytes, bytearray)) else data
+    data_hex = data_hex[2:] if data_hex.startswith("0x") else data_hex
+    if not data_hex.endswith(suffix_hex):
+        transaction["data"] = "0x" + data_hex + suffix_hex
+    return transaction
+
+
 def verify_payment_environment() -> bool:
     """
-    Verify that all required environment variables for payments are set.
+    Verify that the environment is ready for payments.
+
+    Payments use a local key wallet on Celo, so no API keys are required.
 
     Returns:
-        True if environment is properly configured, False otherwise
+        Always True (kept for backward compatibility)
     """
-    # Check required environment variables
-    api_key_name = os.getenv("CDP_API_KEY_NAME")
-    api_key_private = os.getenv("CDP_API_KEY_PRIVATE_KEY")
-
-    if not api_key_name:
-        logger.error("CDP_API_KEY_NAME environment variable is not set")
-        return False
-
-    if not api_key_private:
-        logger.error("CDP_API_KEY_PRIVATE_KEY environment variable is not set")
-        return False
-
     return True
 
 
 def validate_cdp_environment() -> Tuple[bool, str]:
     """
-    Validate that the Coinbase Developer Platform environment is properly configured.
+    Validate that the payment packages (AgentKit) are installed.
+
+    The name is kept for backward compatibility; Coinbase CDP keys are no
+    longer used.
 
     Returns:
         Tuple of (valid: bool, message: str)
     """
     try:
-        # Ensure .env file is loaded
-        from dotenv import load_dotenv
+        import coinbase_agentkit  # noqa: F401
+    except ImportError:
+        return (
+            False,
+            "AgentKit not installed. Install it with: pip install coinbase-agentkit",
+        )
 
-        load_dotenv()
+    try:
+        import coinbase_agentkit_langchain  # noqa: F401
+    except ImportError:
+        return (
+            False,
+            "AgentKit LangChain integration not installed. Install it with: pip install coinbase-agentkit-langchain",
+        )
 
-        # Verify environment variables
-        if not verify_payment_environment():
-            return False, "Required environment variables are missing"
-
-        # Check if CDP packages are installed
-        try:
-            import cdp  # noqa: F401
-        except ImportError:
-            return (
-                False,
-                "CDP SDK not installed. Install it with: pip install cdp-sdk",
-            )
-
-        try:
-            import coinbase_agentkit  # noqa: F401
-        except ImportError:
-            return (
-                False,
-                "AgentKit not installed. Install it with: pip install coinbase-agentkit",
-            )
-
-        try:
-            import coinbase_agentkit_langchain  # noqa: F401
-        except ImportError:
-            return (
-                False,
-                "AgentKit LangChain integration not installed. Install it with: pip install coinbase-agentkit-langchain",
-            )
-
-        return True, "CDP environment is properly configured"
-    except Exception as exc:
-        return False, f"Unexpected error validating CDP environment: {exc}"
+    return True, "Payment environment is properly configured"
 
 
 def get_wallet_metadata(
@@ -112,12 +100,11 @@ def get_wallet_metadata(
 
         # Extract relevant metadata
         metadata = {
-            "wallet_id": wallet_data.get("wallet_id", "Unknown"),
-            "network_id": wallet_data.get("network_id", "Unknown"),
-            "has_seed": "seed" in wallet_data,
+            "chain_id": wallet_data.get("chain_id", "Unknown"),
+            "has_private_key": "private_key" in wallet_data,
         }
 
-        # Don't include sensitive data like seed
+        # Don't include sensitive data like the private key
         return metadata
     except Exception:
         logger.error(

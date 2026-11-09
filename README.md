@@ -62,7 +62,7 @@ AgentConnect delivers unique advantages over classic multi-agent approaches:
 *   **Secure A2A Communication:** Crypto-grade identity & message signing baked in.
 *   **Horizontal scalability:** Engineered for planet-scale agent populations.
 *   **Plug-and-play extensibility:** Easily integrate custom agents, capabilities, and protocols.
-*   **Integrated Agent Economy:** Seamless A2A payments powered by **Coinbase CDP & AgentKit**.
+*   **Integrated Agent Economy:** Seamless A2A payments on **Celo**, powered by **Coinbase AgentKit**.
 
 
 ## ✨ Key Features
@@ -107,7 +107,7 @@ AgentConnect delivers unique advantages over classic multi-agent approaches:
       <h3>💰 Built-in Agent Economy</h3>
       <ul>
         <li>Autonomous A2A Payments</li>
-        <li>Coinbase CDP Integration</li>
+        <li>Celo Payments (AgentKit)</li>
         <li>Instant service settlement</li>
       </ul>
     </td>
@@ -167,9 +167,7 @@ Set required environment variables in your `.env` file:
 ```
 # Required for AI providers (at least one)
 OPENAI_API_KEY=your_openai_api_key
-# Optional for payment capabilities
-CDP_API_KEY_NAME=your_cdp_api_key_name
-CDP_API_KEY_PRIVATE_KEY=your_cdp_api_key_private_key
+# Payments (Celo) need no keys; chain is set in agentconnect.yaml
 ```
 
 For detailed installation instructions and configuration options, see the [QuickStart Guide](docs/source/quickstart.md) and [Installation Guide](docs/source/installation.md).

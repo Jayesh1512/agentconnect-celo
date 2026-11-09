@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Payments now run on Celo (default Celo Sepolia) using a local-key `EthAccountWalletProvider` instead of Coinbase CDP wallets on Base. Configure with `payments.chain_id` / `payments.rpc_url`. CDP API keys are no longer used; existing CDP wallet files are not compatible.
+
 ### Planned
 - A2A communication hardening: ResponseTracker, HTTP transport SPI, Inbox server, metrics, remote A2A support.
 - Unified AgentIdentity with registry-verified connect flows (DID-JWT/challenge) and route grants.

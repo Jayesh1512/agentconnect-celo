@@ -7,7 +7,7 @@ SDK configuration for agent developers: define `agentconnect.yaml` and optional 
 ## Configuration Precedence
 
 - Runtime kwargs > agentconnect.yaml > model defaults (Pydantic).
-- Environment variables are not read by the global SDK settings. They are reserved for secrets used by subsystems (for example: `QDRANT_API_KEY`, `CDP_API_KEY_NAME`, `CDP_API_KEY_PRIVATE_KEY`) and for server configuration in `agentconnect/servers/`.
+- Environment variables are not read by the global SDK settings. They are reserved for secrets used by subsystems (for example: `QDRANT_API_KEY`) and for server configuration in `agentconnect/servers/`.
 
 ## How to Use
 
@@ -76,8 +76,9 @@ agentconnect config init|show|validate <file>
 
 - **PaymentsSettings**
   - `default_token_symbol` (normalized to uppercase; drives ERC-20 vs native)
-  - `wallet_data_dir` (non-secret path for wallets)
-  - Note: CDP keys are env-only (`CDP_API_KEY_NAME`, `CDP_API_KEY_PRIVATE_KEY`). No network id in YAML.
+  - `wallet_data_dir` (path for wallet key files; keep out of version control)
+  - `attribution_data_suffix` (optional ERC-8021 suffix appended to every transaction's calldata)
+  - `chain_id` / `rpc_url` (default Celo Sepolia `11142220`; Celo mainnet is `42220` / `https://forno.celo.org`)
 
 ## Example agentconnect.yaml
 
@@ -134,7 +135,7 @@ mcp:
 
 ## Secrets & Redaction
 
-- Use environment variables for secrets (for example: `QDRANT_API_KEY`, `CDP_API_KEY_NAME`). Do not place secrets in YAML.
+- Use environment variables for secrets (for example: `QDRANT_API_KEY`). Do not place secrets in YAML.
 - `settings.model_dump_yaml_safe()` redacts any `SecretStr` fields (e.g., remote Qdrant `api_key`) in outputs and CLI.
 
 ## CLI Integration

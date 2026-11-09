@@ -8,6 +8,7 @@ defining the core functionality for agent identity, messaging, and interaction.
 from __future__ import annotations
 
 import asyncio
+import json
 import logging
 import time
 
@@ -19,6 +20,7 @@ from dotenv import load_dotenv
 
 # Absolute imports from agentconnect package
 from agentconnect.utils import wallet_manager
+from agentconnect.utils.payment_helper import append_data_suffix
 from agentconnect.core.exceptions import SecurityError
 from agentconnect.core.message import Message
 from agentconnect.config import settings as global_settings
@@ -37,7 +39,7 @@ if TYPE_CHECKING:
 
     # Optional payment types (for static typing and IDEs only)
     from coinbase_agentkit import AgentKit as _AgentKit  # type: ignore
-    from coinbase_agentkit import CdpWalletProvider as _CdpWalletProvider  # type: ignore
+    from coinbase_agentkit import EthAccountWalletProvider as _EthAccountWalletProvider  # type: ignore
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -110,7 +112,7 @@ class BaseAgent(ABC):
 
         # Initialize payment capabilities (avoid optional type names at import time)
         self.enable_payments = enable_payments
-        self.wallet_provider: Optional[_CdpWalletProvider] = None
+        self.wallet_provider: Optional[_EthAccountWalletProvider] = None
         self.agent_kit: Optional[_AgentKit] = None
 
         # Initialize wallet if payments are enabled
@@ -128,29 +130,48 @@ class BaseAgent(ABC):
                 from coinbase_agentkit import (  # type: ignore
                     AgentKit,
                     AgentKitConfig,
-                    CdpWalletProvider,
-                    CdpWalletProviderConfig,
+                    EthAccountWalletProvider,
+                    EthAccountWalletProviderConfig,
                     wallet_action_provider,
                     erc20_action_provider,
-                    cdp_api_action_provider,
                 )
+                from eth_account import Account
 
-                # Initialize wallet provider via coinbase CDP-SDK
-                cdp_config = (
-                    CdpWalletProviderConfig(wallet_data=wallet_data)
+                suffix = global_settings.payments.attribution_data_suffix
+
+                class _TaggedWalletProvider(EthAccountWalletProvider):
+                    """Appends the attribution suffix to every outgoing transaction."""
+
+                    def send_transaction(self, transaction):
+                        return super().send_transaction(
+                            append_data_suffix(transaction, suffix)
+                        )
+
+                # Local key wallet on Celo (chain/RPC from payments config).
+                # Reuse the persisted key if present, otherwise create one.
+                payments_cfg = global_settings.payments
+                private_key = (
+                    json.loads(wallet_data)["private_key"]
                     if wallet_data
-                    else None
+                    else Account.create().key.hex()
                 )
                 self.wallet_provider = cast(
-                    "_CdpWalletProvider", CdpWalletProvider(cdp_config)
+                    "_EthAccountWalletProvider",
+                    _TaggedWalletProvider(
+                        EthAccountWalletProviderConfig(
+                            account=Account.from_key(private_key),
+                            chain_id=payments_cfg.chain_id,
+                            rpc_url=payments_cfg.rpc_url,
+                        )
+                    ),
                 )
 
                 # Prepare action providers based on the token symbol
-                action_providers = [wallet_action_provider(), cdp_api_action_provider()]
+                action_providers = [wallet_action_provider()]
 
-                # Add ERC20 action provider if using tokens other than native ETH
-                payment_symbol = global_settings.payments.default_token_symbol
-                if payment_symbol != "ETH":
+                # Add ERC20 action provider if using tokens other than the native token (CELO)
+                payment_symbol = payments_cfg.default_token_symbol
+                if payment_symbol not in ("CELO", "ETH"):
                     action_providers.append(erc20_action_provider())
 
                 # Initialize coinbase AgentKit with wallet provider and action providers
@@ -163,9 +184,13 @@ class BaseAgent(ABC):
                 # Save wallet data if it's a new wallet
                 if not wallet_data:
                     try:
-                        new_wallet_data = self.wallet_provider.export_wallet()
                         wallet_manager.save_wallet_data(
-                            self.agent_id, new_wallet_data, wallet_data_dir
+                            self.agent_id,
+                            {
+                                "private_key": private_key,
+                                "chain_id": payments_cfg.chain_id,
+                            },
+                            wallet_data_dir,
                         )
                     except Exception as e:
                         logger.warning(

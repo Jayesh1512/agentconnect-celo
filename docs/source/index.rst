@@ -45,7 +45,7 @@ AgentConnect delivers unique advantages over classic multi-agent approaches:
 *   **Secure A2A Communication:** Crypto-grade identity & message signing baked in.
 *   **Horizontal scalability:** Engineered for planet-scale agent populations.
 *   **Plug-and-play extensibility:** Easily integrate custom agents, capabilities, and protocols.
-*   **Integrated Agent Economy:** Seamless A2A payments powered by **Coinbase CDP & AgentKit**.
+*   **Integrated Agent Economy:** Seamless A2A payments on **Celo**, powered by **Coinbase AgentKit**.
 
 Key Features
 =============
@@ -92,7 +92,7 @@ Key Features
        <h3>💰 Built-in Agent Economy</h3>
        <ul>
          <li>Autonomous A2A Payments</li>
-         <li>Coinbase CDP Integration</li>
+         <li>Celo Payments (AgentKit)</li>
          <li>Instant service settlement</li>
        </ul>
      </div>

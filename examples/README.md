@@ -21,7 +21,7 @@ This directory contains examples demonstrating various features and use cases of
     # Linux/macOS
     cp example.env .env
     ```
-    Edit the `.env` file with your credentials. You need **at least one** LLM provider key (OpenAI, Google, Anthropic, Groq). See specific example requirements below for other keys (Telegram, Tavily, CDP).
+    Edit the `.env` file with your credentials. You need **at least one** LLM provider key (OpenAI, Google, Anthropic, Groq). See specific example requirements below for other keys (Telegram, Tavily).
 
 ## Running Examples
 
@@ -52,7 +52,7 @@ python examples/data_analysis_assistant.py
 # Telegram multi-agent system (requires TELEGRAM_BOT_TOKEN)
 python examples/multi_agent/multi_agent_system.py
 
-# Autonomous Workflow with Agent Economy (requires CDP keys)
+# Autonomous Workflow with Agent Economy (uses Celo Sepolia; fund agent wallets from the Celo faucet)
 python examples/autonomous_workflow/run_workflow_demo.py
 ```
 
@@ -62,7 +62,7 @@ python examples/autonomous_workflow/run_workflow_demo.py
 
 *   **Source:** `examples/example_usage.py`
 *   **Description:** Demonstrates fundamental AgentConnect concepts: creating human and AI agents, establishing secure communication, and basic interaction.
-*   **Optional:** Can be run with payment capabilities enabled (see `example_usage.py` comments and requires CDP keys in `.env`).
+*   **Optional:** Can be run with payment capabilities enabled (see `example_usage.py` comments on Celo).
 
 ### E-commerce Analysis
 
@@ -93,15 +93,10 @@ python examples/autonomous_workflow/run_workflow_demo.py
 *   **Description:** Demonstrates a complete autonomous workflow featuring:
     *   Capability-based agent discovery.
     *   A user proxy orchestrating tasks between specialized agents (Research, Telegram Broadcast).
-    *   Automated Agent-to-Agent (A2A) cryptocurrency payments (USDC on Base Sepolia testnet) using Coinbase Developer Platform (CDP).
-*   **Requires:** LLM key(s), `TELEGRAM_BOT_TOKEN`, `TAVILY_API_KEY`, `CDP_API_KEY_NAME`, `CDP_API_KEY_PRIVATE_KEY` all set in `.env`.
+    *   Automated Agent-to-Agent (A2A) cryptocurrency payments (USDC on Celo Sepolia testnet) using Coinbase AgentKit.
+*   **Requires:** LLM key(s), `TELEGRAM_BOT_TOKEN`, `TAVILY_API_KEY` set in `.env`.
     *   **Telegram Token:** See instructions in the `telegram` example section above.
-    *   **CDP Keys:** 
-        1. Sign up/in at [Coinbase Developer Platform](https://cloud.coinbase.com/products/develop).
-        2. Create a new Project if needed.
-        3. Navigate to the **API Keys** section within your project.
-        4. Create a new API key with `wallet:transaction:send`, `wallet:transaction:read`, `wallet:address:read`, `wallet:user:read` permissions (or select the pre-defined "Wallet" role).
-        5. Securely copy the **API Key Name** and the **Private Key** provided upon creation and add them to your `.env` file.
+    *   **Wallets:** No keys needed. Agent wallets are created locally; fund their addresses with testnet CELO/USDC from the [Celo faucet](https://faucet.celo.org).
 
 ## Monitoring with LangSmith
 

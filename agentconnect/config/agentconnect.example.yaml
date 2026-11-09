@@ -29,11 +29,13 @@ registry:
       batch_size: 100
 
 # Payments configuration
-# Non-secrets only. CDP API keys must be provided via environment variables:
-#   - CDP_API_KEY_NAME
-#   - CDP_API_KEY_PRIVATE_KEY
+# Agent wallets are local keys on Celo (no API keys). Celo mainnet: chain_id "42220",
+# rpc_url "https://forno.celo.org".
 payments:
-  default_token_symbol: "USDC"      # e.g., USDC or ETH; drives ERC-20 vs native tools
+  default_token_symbol: "USDC"      # e.g., USDC or CELO; drives ERC-20 vs native tools
+  chain_id: "11142220"              # Celo Sepolia (testnet)
+  rpc_url: "https://forno.celo-sepolia.celo-testnet.org"
+  attribution_data_suffix: ""       # optional ERC-8021 suffix (0x...) appended to every tx
   wallet_data_dir: "data/agent_wallets"  # where agent wallets are stored (non-secret path)
 
 # Communication system settings

@@ -13,13 +13,11 @@ Note:
 
 import json
 import logging
+import os
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 from agentconnect.config import settings as global_settings
-
-# Import dependencies directly since they're required
-from cdp import WalletData
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -72,7 +70,7 @@ def set_wallet_data_dir(data_dir: Union[str, Path]) -> Path:
 
 def save_wallet_data(
     agent_id: str,
-    wallet_data: Union[WalletData, str, Dict],
+    wallet_data: Union[str, Dict],
     data_dir: Optional[Union[str, Path]] = None,
 ) -> None:
     """
@@ -85,7 +83,7 @@ def save_wallet_data(
 
     Args:
         agent_id: String identifier for the agent.
-        wallet_data: The wallet data to save. Can be a cdp.WalletData object, a Dict representation, or a JSON string.
+        wallet_data: The wallet data to save. Can be a Dict or a JSON string.
         data_dir: Optional custom directory for wallet data storage. If None, uses the DEFAULT_DATA_DIR.
 
     Raises:
@@ -106,15 +104,12 @@ def save_wallet_data(
         if isinstance(wallet_data, str):
             # Assume it's valid JSON string
             json_data = wallet_data
-        elif isinstance(wallet_data, Dict):
-            # Convert dict to JSON string
-            json_data = json.dumps(wallet_data)
         else:
-            # Assume it's a WalletData object and serialize it
-            json_data = json.dumps(wallet_data.to_dict())
+            json_data = json.dumps(wallet_data)
 
-        # Write to file
-        with open(file_path, "w") as f:
+        # Write to file (owner-only: it contains a private key)
+        fd = os.open(file_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        with os.fdopen(fd, "w") as f:
             f.write(json_data)
 
     except Exception as e:
@@ -222,10 +217,8 @@ def get_all_wallets(data_dir: Optional[Union[str, Path]] = None) -> List[Dict]:
                 with open(file_path, "r") as f:
                     data = json.loads(f.read())
 
-                if "wallet_id" in data:
-                    wallet_info["wallet_id"] = data["wallet_id"]
-                if "network_id" in data:
-                    wallet_info["network_id"] = data["network_id"]
+                if "chain_id" in data:
+                    wallet_info["chain_id"] = data["chain_id"]
             except Exception:
                 logger.error(
                     "Error reading wallet data for %s", agent_id, exc_info=True

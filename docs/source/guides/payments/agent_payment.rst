@@ -20,24 +20,23 @@ and a published payment address.
 Prerequisites
 -----------------
 
-A `Coinbase Developer Platform <https://portal.cdp.coinbase.com/>`_ API key, plus the
-AgentKit packages:
+The AgentKit packages (no API keys needed; each agent holds a local key on `Celo <https://celo.org>`_):
 
 .. code-block:: bash
 
-    pip install coinbase-agentkit coinbase-agentkit-langchain cdp-sdk
+    pip install coinbase-agentkit coinbase-agentkit-langchain
 
-Add credentials to your ``.env`` file:
+Pick the chain in ``agentconnect.yaml`` (defaults to Celo Sepolia testnet):
 
-.. code-block:: bash
+.. code-block:: yaml
 
-    CDP_API_KEY_NAME=your_cdp_api_key_name
-    CDP_API_KEY_PRIVATE_KEY=your_cdp_api_key_private_key
-    CDP_NETWORK_ID=base-sepolia   # optional, this is the default
+    payments:
+      chain_id: "11142220"                                    # Celo Sepolia (testnet)
+      rpc_url: "https://forno.celo-sepolia.celo-testnet.org"
+      # Celo mainnet: chain_id "42220", rpc_url "https://forno.celo.org"
 
-``CDP_NETWORK_ID`` accepts any network AgentKit supports: ``base-sepolia`` and
-``ethereum-sepolia`` for testing, ``base-mainnet`` and ``ethereum-mainnet`` for
-production. Start on a testnet.
+Fund the agent's address (``agent.profile.payment_address``) with testnet CELO from the
+`Celo faucet <https://faucet.celo.org>`_. Start on a testnet.
 
 Enabling Payments
 ---------------------
@@ -57,17 +56,17 @@ Enabling Payments
         enable_payments=True,
     )
 
-This one flag creates a wallet for the agent (or loads an existing one for the same
+This one flag creates a Celo wallet for the agent (or loads an existing one for the same
 ``agent_id``), adds payment tools to its toolset, and writes the resulting wallet address
 to ``agent.profile.payment_address``. Because ``payment_address`` lives on the profile,
 it's included automatically wherever that profile is discovered, no separate step to
 publish it.
 
-.. admonition:: Invalid CDP environment fails silently
+.. admonition:: Missing packages fail silently
    :class: warning
 
-   If ``enable_payments=True`` but the CDP environment isn't configured, the agent
-   builds successfully with payments disabled rather than raising. Check your logs for
+   If ``enable_payments=True`` but AgentKit isn't installed, the agent builds
+   successfully with payments disabled rather than raising. Check your logs for
    ``Payment capabilities disabled due to invalid CDP environment`` if payment tools
    seem to be missing.
 
@@ -224,7 +223,7 @@ Verifying Readiness
    * - ``payments_enabled``
      - ``enable_payments=True`` was set
    * - ``wallet_provider_available``
-     - The CDP wallet initialized successfully
+     - The Celo wallet initialized successfully
    * - ``agent_kit_available``
      - AgentKit initialized successfully
    * - ``payment_address``
@@ -247,12 +246,10 @@ Wallet Utilities
 Security Considerations
 ---------------------------
 
-- **Unencrypted storage**: wallet seeds are plain JSON on disk by default. Encrypt before
+- **Unencrypted storage**: wallet private keys are plain JSON on disk (file mode 0600) by default. Encrypt before
   production use with real funds.
-- **API keys**: keep CDP credentials out of version control; use environment variables
-  or a secrets manager.
-- **Testnets first**: use small amounts on ``base-sepolia`` or ``ethereum-sepolia`` before
-  moving to mainnet.
+- **Wallet files**: keep ``wallet_data_dir`` out of version control.
+- **Testnets first**: use small amounts on Celo Sepolia before moving to mainnet.
 - **Access control**: anything that can construct an agent with ``enable_payments=True``
   can spend from that agent's wallet. Treat agent creation as a privileged action.
 
@@ -262,7 +259,7 @@ Troubleshooting
 - **Payment tools missing even though ``enable_payments=True``**: check your logs for
   ``Payment capabilities disabled due to invalid CDP environment``. This is the silent
   failure mode described above under Enabling Payments.
-- **Confirming the CDP environment directly**:
+- **Confirming the payment environment directly**:
 
   .. code-block:: python
 
@@ -272,7 +269,7 @@ Troubleshooting
       if not is_valid:
           print(message)
 
-- **Missing packages**: install ``cdp-sdk``, ``coinbase-agentkit``, and
+- **Missing packages**: install ``coinbase-agentkit`` and
   ``coinbase-agentkit-langchain`` together; a partial install is the most common cause of
   import errors.
 - **Corrupted wallet data**: delete it with ``wallet_manager.delete_wallet_data(agent_id)``

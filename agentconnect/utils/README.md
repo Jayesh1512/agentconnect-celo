@@ -8,7 +8,7 @@ The utils module provides utility functions and classes used throughout the Agen
 utils/
 ├── __init__.py           # Package initialization and API exports
 ├── interaction_control.py # Rate limiting and interaction tracking
-├── payment_helper.py     # Payment utilities for CDP validation and agent payment readiness
+├── payment_helper.py     # Payment utilities for AgentKit validation and agent payment readiness
 ├── wallet_manager.py     # Agent wallet persistence utilities
 └── README.md             # This file
 ```
@@ -39,14 +39,14 @@ AgentConnect is a library and never configures logging. Applications (servers/CL
 
 The payment helper module provides utility functions for setting up and managing payment capabilities:
 
-- **CDP Environment Validation**: Verify CDP API keys and required packages
+- **Payment Environment Validation**: Verify required AgentKit packages
 - **Agent Payment Readiness**: Check if an agent is ready for payments
 - **Wallet Metadata Retrieval**: Get metadata about agent wallets
 - **Backup Utilities**: Create backups of wallet data
 
 Key functions:
 - `verify_payment_environment()`: Check required environment variables
-- `validate_cdp_environment()`: Validate the entire CDP setup including packages
+- `validate_cdp_environment()`: Validate that the AgentKit packages are installed
 - `check_agent_payment_readiness()`: Check if an agent can make payments
 - `backup_wallet_data()`: Create backup of wallet data
 
@@ -149,10 +149,10 @@ disable_all_logging()
 ```python
 from agentconnect.utils import payment_helper, wallet_manager
 
-# Validate CDP environment
+# Validate payment environment
 is_valid, message = payment_helper.validate_cdp_environment()
 if not is_valid:
-    print(f"CDP environment is not properly configured: {message}")
+    print(f"Payment environment is not properly configured: {message}")
     # Set up environment...
 
 # Check agent payment readiness

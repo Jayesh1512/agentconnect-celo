@@ -41,7 +41,7 @@ The `BaseAgent` class is an abstract base class that defines the core functional
 - **Capability Declaration**: Defining what an agent can do
 - **Conversation Management**: Tracking and managing conversations between agents
 - **Cooldown Mechanism**: Rate limiting to prevent overloading
-- **Payment Capabilities**: Optional integration with Coinbase Developer Platform (CDP)
+- **Payment Capabilities**: Optional Celo wallets via Coinbase AgentKit (local key)
 
 Key methods:
 - `send_message()`: Send a message to another agent
@@ -155,7 +155,7 @@ The `types.py` file defines core types used throughout the framework:
 
 ### Payment Integration
 
-The core module integrates with the Coinbase Developer Platform (CDP) for payment capabilities:
+The core module uses Coinbase AgentKit with a local-key wallet on Celo for payment capabilities:
 
 - **BaseAgent Wallet Setup**: `BaseAgent.__init__` conditionally initializes agent wallets when `enable_payments=True`
 - **Payment Address Storage**: `payment_address` field in `AgentProfile` and `AgentRegistration` 

@@ -302,7 +302,7 @@ MCP search defaults, wallet data directory, token symbol.
 
 **Never in YAML**: API keys, private keys, passwords, tokens — these go in environment
 variables and are read directly by the subsystems that need them
-(``OPENAI_API_KEY``, ``QDRANT_API_KEY``, ``CDP_API_KEY_*``, etc.).
+(``OPENAI_API_KEY``, ``QDRANT_API_KEY``, etc.).
 
 Troubleshooting
 ---------------

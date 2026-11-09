@@ -9,7 +9,7 @@ It features three agents:
 3. Telegram Broadcast Agent - Broadcasts messages to a Telegram group
 
 The demo showcases autonomous service discovery, execution, and payment between agents
-using AgentKit/CDP SDK integration within the AgentConnect framework.
+using AgentKit (Celo) integration within the AgentConnect framework.
 """
 
 import asyncio
@@ -58,8 +58,8 @@ def print_colored(message: str, color_type: str = "SYSTEM") -> None:
     print(f"{color}{message}{Style.RESET_ALL}")
 
 
-# Define Base Sepolia USDC Contract Address
-BASE_SEPOLIA_USDC_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e"
+# Define Celo Sepolia USDC Contract Address
+CELO_SEPOLIA_USDC_ADDRESS = "0x01C5C0122039549AD1493B8220cABEdD739BC44E"
 
 # Define Capabilities
 GENERAL_RESEARCH = Capability(
@@ -93,10 +93,6 @@ async def setup_agents() -> Tuple[AIAgent, AIAgent, TelegramAIAgent, HumanAgent]
     missing_vars = []
     if not google_api_key and not openai_api_key:
         missing_vars.append("GOOGLE_API_KEY or OPENAI_API_KEY")
-    if not os.getenv("CDP_API_KEY_NAME"):
-        missing_vars.append("CDP_API_KEY_NAME")
-    if not os.getenv("CDP_API_KEY_PRIVATE_KEY"):
-        missing_vars.append("CDP_API_KEY_PRIVATE_KEY")
     if not telegram_token:
         missing_vars.append("TELEGRAM_BOT_TOKEN")
     if not tavily_api_key:
@@ -165,8 +161,8 @@ async def setup_agents() -> Tuple[AIAgent, AIAgent, TelegramAIAgent, HumanAgent]
         personality=f"""You are a workflow orchestrator. You interact with other agents to complete tasks. You are responsible for managing payments and returning results.
         If a payment is made, provide the amount and the transaction hash in your response.
 
-        **Payment Details (USDC on Base Sepolia):**
-        - Contract: {BASE_SEPOLIA_USDC_ADDRESS}
+        **Payment Details (USDC on Celo Sepolia):**
+        - Contract: {CELO_SEPOLIA_USDC_ADDRESS}
         - Amount: 6 decimals. 1 USDC = '1000000'.
         """,
     )
@@ -227,7 +223,7 @@ async def setup_agents() -> Tuple[AIAgent, AIAgent, TelegramAIAgent, HumanAgent]
 - **For conceptual topics or general questions:** Adapt the structure logically. Focus on defining the concept, explaining key aspects, providing examples, discussing benefits/drawbacks, listing sources, and offering a concluding summary.
 - **Always include Sources Consulted.**
 
-Your fee is 2 USDC (Base Sepolia). When responding, state your fee.""",
+Your fee is 2 USDC (Celo Sepolia). When responding, state your fee.""",
         custom_tools=[
             TavilySearchResults(api_key=tavily_api_key, max_results=5),
             RequestsGetTool(
@@ -272,7 +268,7 @@ Your fee is 2 USDC (Base Sepolia). When responding, state your fee.""",
         identity=AgentIdentity.create_key_based(),
         enable_payments=True,
         personality="""You are a Telegram Broadcast Specialist. You broadcast messages to all regestered Telegram groups. \
-            Your fee is 1 USDC (Base Sepolia). After broadcasting, state your fee in your response.""",
+            Your fee is 1 USDC (Celo Sepolia). After broadcasting, state your fee in your response.""",
         telegram_token=telegram_token,
     )
 
