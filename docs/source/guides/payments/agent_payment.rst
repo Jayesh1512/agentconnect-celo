@@ -118,7 +118,7 @@ Override the directory per agent instead of globally:
 .. admonition:: Wallet data is unencrypted on disk
    :class: warning
 
-   The default storage writes wallet seeds as plain JSON. Fine for testnets and demos,
+   The default storage writes wallet private keys as plain JSON (file mode 0600). Fine for small balances and demos,
    not for production wallets holding real assets. Encrypt this data yourself before
    deploying with real funds.
 
@@ -207,19 +207,16 @@ Added to the agent's toolset automatically when ``enable_payments=True``:
      - Address, network, and balances
    * - ``get_balance``
      - ``WalletActionProvider``
-     - Native currency balance (e.g. ETH)
+     - Native currency balance (CELO)
    * - ``native_transfer``
      - ``WalletActionProvider``
      - Transfers native currency
-   * - ``request_faucet_funds``
-     - ``CdpApiActionProvider``
-     - Requests testnet funds
-   * - ``address_reputation``
-     - ``CdpApiActionProvider``
-     - Checks an address's reputation
+   * - ``pay_for_x402_resource``
+     - ``agentconnect.utils.x402_client``
+     - GETs a URL and, on HTTP 402, pays it over x402 (capped per payment)
    * - ``get_balance`` (ERC-20)
      - ``Erc20ActionProvider``
-     - Balance of a specific token; added when the configured token isn't ``ETH``
+     - Balance of a specific token; added when the configured token isn't the native token (``CELO``)
    * - ``transfer`` (ERC-20)
      - ``Erc20ActionProvider``
      - Transfers a specific token amount

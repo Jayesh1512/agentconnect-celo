@@ -96,7 +96,7 @@ python examples/autonomous_workflow/run_workflow_demo.py
     *   Automated Agent-to-Agent (A2A) cryptocurrency payments (USDC on Celo) using Coinbase AgentKit.
 *   **Requires:** LLM key(s), `TELEGRAM_BOT_TOKEN`, `TAVILY_API_KEY` set in `.env`.
     *   **Telegram Token:** See instructions in the `telegram` example section above.
-    *   **Wallets:** No keys needed. Agent wallets are created locally; fund their addresses with testnet CELO/USDC from the [Celo faucet](https://faucet.celo.org).
+    *   **Wallets:** No keys needed. Agent wallets are created locally; fund their addresses with a little CELO (gas) and USDC on Celo mainnet (or use Celo Sepolia and the [Celo faucet](https://faucet.celo.org)).
 
 ## Monitoring with LangSmith
 
