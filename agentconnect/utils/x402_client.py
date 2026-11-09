@@ -17,7 +17,12 @@ logger = logging.getLogger(__name__)
 _V1_NETWORK = {"42220": "celo", "11142220": "celo-sepolia"}
 
 
-def create_x402_session(account: Any, chain_id: Optional[str] = None, max_amount: Optional[str] = None):
+def create_x402_session(
+    account: Any,
+    chain_id: Optional[str] = None,
+    max_amount: Optional[str] = None,
+    prefer_asset: Optional[str] = None,
+):
     """
     Build a ``requests.Session`` that automatically pays 402 responses.
 
@@ -27,6 +32,8 @@ def create_x402_session(account: Any, chain_id: Optional[str] = None, max_amount
         max_amount: Per-payment USD cap, e.g. ``"$0.50"`` (defaults to
             ``payments.x402_max_amount_per_payment``). Anything above is refused
             before signing.
+        prefer_asset: Token address to pay with when a server offers several
+            (e.g. USDC, USDT, USAT); otherwise the first offer is used.
     """
     import requests
     from x402 import SchemeRegistration, x402ClientConfig
@@ -36,6 +43,12 @@ def create_x402_session(account: Any, chain_id: Optional[str] = None, max_amount
 
     payments = global_settings.payments
     chain_id = chain_id or payments.chain_id
+
+    def select(version, offers):
+        for offer in offers:
+            if prefer_asset and offer.asset.lower() == prefer_asset.lower():
+                return offer
+        return offers[0]
     config = x402ClientConfig(
         schemes=[
             SchemeRegistration(
@@ -48,6 +61,7 @@ def create_x402_session(account: Any, chain_id: Optional[str] = None, max_amount
                 x402_version=1,
             ),
         ],
+        payment_requirements_selector=select,
         spend_controls={
             "max_amount_per_payment": max_amount or payments.x402_max_amount_per_payment
         },
